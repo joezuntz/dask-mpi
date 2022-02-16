@@ -12,7 +12,7 @@ except ImportError:
             print(line)
             if line == "dependencies:":
                 in_deps = True
-            elif in_deps and line.startswith('- '):
+            elif in_deps and line.startswith("- "):
                 dep = line[1:].strip()
                 deps.append(dep)
             else:
