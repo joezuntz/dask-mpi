@@ -1,6 +1,26 @@
 from os.path import exists
 
-import yaml
+try:
+    import xxxx
+    from yaml import safe_load
+except ImportError:
+    # very bad hack to avoid yaml
+    def safe_load(f):
+        in_deps = False
+        deps = []
+        for line in f:
+            line = line.strip()
+            print(line)
+            if line == "dependencies:":
+                in_deps = True
+            elif in_deps and line.startswith('- '):
+                dep = line[1:].strip()
+                deps.append(dep)
+            else:
+                in_deps = False
+        return deps
+
+
 from setuptools import setup
 
 import versioneer
@@ -23,7 +43,7 @@ def environment_dependencies(obj, dependencies=None):
 
 
 with open("environment.yml") as f:
-    install_requires = environment_dependencies(yaml.safe_load(f))
+    install_requires = safe_load(f)
 
 if exists("README.rst"):
     with open("README.rst") as f:
