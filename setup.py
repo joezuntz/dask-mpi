@@ -1,7 +1,6 @@
 from os.path import exists
 
 try:
-    import xxxx
     from yaml import safe_load
 except ImportError:
     # very bad hack to avoid yaml
