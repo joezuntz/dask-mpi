@@ -9,7 +9,6 @@ except ImportError:
         deps = []
         for line in f:
             line = line.strip()
-            print(line)
             if line == "dependencies:":
                 in_deps = True
             elif in_deps and line.startswith("- "):
@@ -28,8 +27,8 @@ import versioneer
 def environment_dependencies(obj, dependencies=None):
     if dependencies is None:
         dependencies = []
-    # if isinstance(obj, string_types):
-    #     dependencies.append(obj.replace('=', '=='))
+    if isinstance(obj, str):
+        dependencies.append(obj)
     elif isinstance(obj, dict):
         if "dependencies" in obj:
             environment_dependencies(obj["dependencies"], dependencies=dependencies)
@@ -42,7 +41,7 @@ def environment_dependencies(obj, dependencies=None):
 
 
 with open("environment.yml") as f:
-    install_requires = safe_load(f)
+    install_requires = environment_dependencies(safe_load(f))
 
 if exists("README.rst"):
     with open("README.rst") as f:
